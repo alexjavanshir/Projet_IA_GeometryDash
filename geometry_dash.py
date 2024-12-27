@@ -128,8 +128,6 @@ class Game:
 
         #---------------------------CREATION DU NIVEAU---------------------------#
 
-        
-        # Scrolling
         self.scroll_offset = 0
 
     def draw_ground(self) -> None:
