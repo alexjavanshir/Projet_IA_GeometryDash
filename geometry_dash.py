@@ -139,8 +139,8 @@ class Game:
                         GameConfig.SCREEN_WIDTH, GameConfig.GROUND_HEIGHT)
         )
         # Dessiner le texte qui suit le joueur
-        font = pygame.font.Font(None, 160)  # Police par défaut, taille 36
-        text_surface = font.render("IA Geometry Dash", True, (0, 2, 110))  # Texte en rouge
+        font = pygame.font.Font(None, 160)  # Police
+        text_surface = font.render("IA Geometry Dash", True, (0, 2, 110))  #Couleur
         text_x = 150 #Suivre la position du joueur sur l'axe X
         text_y = GameConfig.SCREEN_HEIGHT - GameConfig.GROUND_HEIGHT + 40  # Position verticale au-dessus du sol
         self.screen.blit(text_surface, (text_x, text_y))
