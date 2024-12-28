@@ -4,6 +4,14 @@ import pygame
 from dataclasses import dataclass
 from typing import List, Tuple
 from level_data import level_obstacles
+import gym
+import torch
+device = torch.device("cpu")
+
+from geometry_dash_env import GeometryDashEnv
+
+
+
 
 #from level_test import level_obstacles
 
