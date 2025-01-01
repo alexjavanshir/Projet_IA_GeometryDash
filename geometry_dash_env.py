@@ -30,28 +30,25 @@ class GeometryDashEnv(gym.Env):
             
             # Fait l'action dans le jeu
             if action == 1:
-                print("SAUT!")
                 self.game.player.handle_jump({pygame.K_SPACE: True}, GameConfig.GROUND_HEIGHT, GameConfig.SCREEN_HEIGHT)
 
             self.game.player.update_position()
             self.game.scroll_offset -= GameConfig.SCROLL_SPEED * self.game.dt
             self.game.player.apply_gravity(self.game.dt, GameConfig.GROUND_HEIGHT, GameConfig.SCREEN_HEIGHT)
+            self.game.player.angle = self.game.player.rotate()
             
             reward = 0
             collision = self.game.check_collisions()
 
             # Attribuer une récompense
             if collision:
-                print("Collision !")
-                reward = -100
+                reward = -150
                 done = True
             else:
-                print("Pas de collision.")
                 reward = 1
                 done = False
 
             state = np.array([self.game.player.pos.y, self.game.player.vertical_velocity], dtype=np.float32)
-            print(f"Reward : {reward}")
 
             return state, reward, done, {}
 
@@ -69,14 +66,14 @@ class GeometryDashEnv(gym.Env):
             self.game.draw_ground()
             self.game.draw_obstacles()
             self.game.player.draw(self.game.screen)
+
             
             # Afficher des informations de debug
             font = pygame.font.Font(None, 36)
             debug_info = [
-                f"Position X: {self.game.player.pos.x-self.game.scroll_offset:.1f}",
-                f"Position Y: {self.game.player.pos.y:.1f}",
-                f"Vitesse: {self.game.player.vertical_velocity:.1f}",
-                f"Scroll: {self.game.scroll_offset:.1f}"
+                f"Position X: {self.game.player.pos.x-self.game.scroll_offset:.0f}",
+                f"Position Y: {450-self.game.player.pos.y:.0f}",
+                f"Vitesse: {self.game.player.vertical_velocity:.0f}"
             ]
             
             for i, text in enumerate(debug_info):

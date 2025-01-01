@@ -162,13 +162,21 @@ class Game:
                 pygame.draw.rect(self.screen, "black", square_rect)
                 pygame.draw.rect(self.screen, "gray", square_rect, width=3)
 
+    def get_visible_obstacles(self) -> List[Obstacle]:
+        """Filtre les obstacles visibles sur l'écran."""
+        visible_obstacles = [
+            obstacle for obstacle in self.obstacles
+            if 0 <= self.scroll_offset + obstacle.x <= GameConfig.SCREEN_WIDTH
+        ]
+        return visible_obstacles
 
     def check_collisions(self) -> bool:
         """Check for collisions between player and obstacles using previous position."""
+        visible_obstacles = self.get_visible_obstacles()
         player_rect = pygame.Rect(self.player.pos.x, self.player.pos.y, *self.player.size)
         prev_player_rect = pygame.Rect(self.player.prev_pos.x, self.player.prev_pos.y, *self.player.size)
         
-        for obstacle in self.obstacles:
+        for obstacle in visible_obstacles:
             obstacle_x = self.scroll_offset + obstacle.x
             obstacle_y = GameConfig.SCREEN_HEIGHT - GameConfig.GROUND_HEIGHT - obstacle.height - obstacle.y
             
@@ -192,6 +200,7 @@ class Game:
                         return False
                     return True
         return False
+
 
     def reset(self) -> None:
         """Reset the game to its initial state."""
@@ -247,7 +256,7 @@ class Game:
         pygame.quit()
 
 
-MODE_IA = True; #Permet de switcher entre le jeu manuel et l'ia
+MODE_IA = False; #Permet de switcher entre le jeu manuel et l'ia
 
 def main():
     if MODE_IA:
@@ -261,30 +270,18 @@ def main():
             done = False
             score = 0
 
-            
             print(f"--- Épisode {episode} ---")
             
             while not done:
-                pygame.time.wait(16)
+                action = random.choice([0, 0, 0, 0, 0, 1])  # 0 = pas de saut, 1 = saut
 
-                print("debug 1")
-                action = random.choice([0, 0, 0, 1])  # 0 = pas de saut, 1 = saut
-
-                print("debug 2")
                 # Avancer d'une étape
                 next_state, reward, done, _ = env.step(action)
-
-                print("debug 3")
                 score += reward
-
-                print("debug 4")
                 state = next_state
-
-                print("debug 5\n\n")
-
                 env.render()
             
-            print(f"Score de l'épisode {episode} : {score}")
+            print(f"Score de l'épisode {episode} : {score}\n")
     else:
         game = Game()
         game.run()
