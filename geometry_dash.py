@@ -1,20 +1,18 @@
+from operator import call
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "1"
 import pygame
 from dataclasses import dataclass
 from typing import List, Tuple
 from level_data import level_obstacles
+#from level_test import level_obstacles
+
+"""(IA"""
 import gym
 import torch
 device = torch.device("cpu")
-
-from geometry_dash_env import GeometryDashEnv
-
-
-
-
-#from level_test import level_obstacles
-
+import random
+"""IA)"""
 
 class GameConfig:
     """Centralized game configuration."""
@@ -130,11 +128,9 @@ class Game:
             GameConfig.SCREEN_HEIGHT - GameConfig.GROUND_HEIGHT - 70
         )
         
-        #---------------------------CREATION DU NIVEAU---------------------------#
-
+        # Creation du niveau
         self.obstacles = level_obstacles
 
-        #---------------------------CREATION DU NIVEAU---------------------------#
 
         self.scroll_offset = 0
 
@@ -250,10 +246,49 @@ class Game:
 
         pygame.quit()
 
+
+MODE_IA = True; #Permet de switcher entre le jeu manuel et l'ia
+
 def main():
-    """Entry point of the game."""
-    game = Game()
-    game.run()
+    if MODE_IA:
+        from geometry_dash_env import GeometryDashEnv
+        env = GeometryDashEnv()
+        episodes = 10
+
+        # Boucle principale
+        for episode in range(1, episodes+1):
+            state = env.reset()  # Réinitialise l'environnement
+            done = False
+            score = 0
+
+            
+            print(f"--- Épisode {episode} ---")
+            
+            while not done:
+                pygame.time.wait(16)
+
+                print("debug 1")
+                action = random.choice([0, 0, 0, 1])  # 0 = pas de saut, 1 = saut
+
+                print("debug 2")
+                # Avancer d'une étape
+                next_state, reward, done, _ = env.step(action)
+
+                print("debug 3")
+                score += reward
+
+                print("debug 4")
+                state = next_state
+
+                print("debug 5\n\n")
+
+                env.render()
+            
+            print(f"Score de l'épisode {episode} : {score}")
+    else:
+        game = Game()
+        game.run()
+    
 
 if __name__ == "__main__":
     main()
