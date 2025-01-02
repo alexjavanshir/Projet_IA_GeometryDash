@@ -1,9 +1,9 @@
-from pickle import TRUE
 import pygame
 import gym
 from gym import spaces
 import numpy as np
-from geometry_dash import Game, GameConfig, Player
+from game import Game
+from game_config import GameConfig
 
 class GeometryDashEnv(gym.Env):
     def __init__(self):
@@ -60,7 +60,7 @@ class GeometryDashEnv(gym.Env):
         return state
 
 
-    def render(self, mode="human"):
+    def render(self, episode, total_episode, mode="human"):
             """Rendu du jeu"""
             self.game.screen.fill(GameConfig.BG_COLOR)
             self.game.draw_ground()
@@ -71,6 +71,8 @@ class GeometryDashEnv(gym.Env):
             # Afficher des informations de debug
             font = pygame.font.Font(None, 36)
             debug_info = [
+                "<---- Mode IA Activé ---->",
+                f"Episode : {episode} / {total_episode}",
                 f"Position X: {self.game.player.pos.x-self.game.scroll_offset:.0f}",
                 f"Position Y: {450-self.game.player.pos.y:.0f}",
                 f"Vitesse: {self.game.player.vertical_velocity:.0f}"
