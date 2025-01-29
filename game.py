@@ -43,7 +43,7 @@ class Game:
             pygame.Rect(0, GameConfig.SCREEN_HEIGHT - GameConfig.GROUND_HEIGHT, 
                         GameConfig.SCREEN_WIDTH, GameConfig.GROUND_HEIGHT)
         )
-        # Dessiner le texte qui suit le joueur
+        # Texte qui suit le joueur
         font = pygame.font.Font(None, 160)  # Police
         text_surface = font.render("IA Geometry Dash", True, (0, 2, 110))  #Couleur
         text_x = 150 #Suivre la position du joueur sur l'axe X
